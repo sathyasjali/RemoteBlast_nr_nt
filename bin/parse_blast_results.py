@@ -1,43 +1,54 @@
+#!/usr/bin/env python3
+
 import pandas as pd
-import argparse
+import sys
 
-def parse_blast_results(input_file, output_file):
+def parse_blast_results(core_nt_file, output_csv):
     """
-    Parses the BLAST results CSV and extracts required columns into a new CSV file.
+    Parses BLAST output from the core_nt database, filters alignments shorter than 200 bp,
+    and extracts the required columns with descriptive labels.
 
-    :param input_file: Path to the input CSV file
-    :param output_file: Path to the output formatted CSV file
+    Parameters:
+    - core_nt_file: Path to the BLAST output file for the core_nt database.
+    - output_csv: Output CSV file to save the filtered results.
     """
-    # Define essential columns required in the final output
-    required_columns = [
-        "query", "accession", "title", "sequence", "identity", "alignment_length",
-        "mismatches", "gap_opens", "q_start", "q_end", "s_start", "s_end", "e_value", "bit_score"
+    # Define column headers based on BLAST outfmt 6
+    columns = [
+        "Query_ID", "Subject_ID", "Subject_Title", "Percent_Identity", 
+        "Query_Coverage", "Alignment_Length", "Mismatches", "Gap_Openings", 
+        "Query_Start", "Query_End", "Subject_Start", "Subject_End", "E_Value", 
+        "Bit_Score", "Subject_Sequence"
     ]
 
-    # Read the CSV file
-    try:
-        df = pd.read_csv(input_file)
+    # Read the BLAST results and skip the first row (header)
+    df_core = pd.read_csv(core_nt_file, sep="\t", names=columns, skiprows=1)
 
-        # Ensure all required columns exist
-        missing_columns = [col for col in required_columns if col not in df.columns]
-        if missing_columns:
-            print(f"Warning: Missing columns in input file: {missing_columns}. Proceeding with available data.")
+    # Convert "Alignment_Length" column to integer
+    df_core["Alignment_Length"] = pd.to_numeric(df_core["Alignment_Length"], errors="coerce")
 
-        # Select only existing required columns
-        df_selected = df[[col for col in required_columns if col in df.columns]]
+    # Drop rows where "Alignment_Length" could not be converted
+    df_core = df_core.dropna(subset=["Alignment_Length"])
 
-        # Save the formatted file
-        df_selected.to_csv(output_file, index=False)
-        print(f"Successfully saved parsed BLAST results to {output_file}")
+    # Convert back to integer
+    df_core["Alignment_Length"] = df_core["Alignment_Length"].astype(int)
 
-    except Exception as e:
-        print(f"Error processing file: {e}")
+    # Filter alignments with length less than 200 bp
+    df_filtered = df_core[df_core["Alignment_Length"] >= 200]
+
+    # Extract the required columns with descriptive names
+    df_final = df_filtered[["Query_ID", "Subject_ID", "Subject_Title", "Subject_Sequence"]]
+
+    # Save the filtered results to a CSV file
+    df_final.to_csv(output_csv, index=False)
+
+    print(f"Filtered BLAST results saved to {output_csv}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Parse BLAST result CSV file and format output")
-    parser.add_argument("--input", required=True, help="Path to the input CSV file")
-    parser.add_argument("--output", required=True, help="Path to the output CSV file")
+    if len(sys.argv) != 3:
+        print("Usage: python parse_blast_results.py <core_nt_file> <output_csv>")
+        sys.exit(1)
+
+    core_nt_file = sys.argv[1]
+    output_csv = sys.argv[2]
     
-    args = parser.parse_args()
-    
-    parse_blast_results(args.input, args.output)
+    parse_blast_results(core_nt_file, output_csv)

@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 
 
-params.input  = "${baseDir}/data/test.fasta"
+params.input  = "${baseDir}/test.fasta"
 params.outdir = "${baseDir}/results"
 params.combineScript = "${baseDir}/bin/combine_blast.sh"
 
@@ -35,8 +35,7 @@ process blast_remote {
          2> core_nt_error.log || { echo "Error: core_nt BLAST failed"; exit 1; }
 
     # BLAST for tsa_nt database
-    echo "Adding headers and running BLAST search on tsa_nt..."
-    echo -e "qseqid\tsseqid\tstitle\tpident\tqcovs\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore\tsseq" > remote_blast_output_tsa_nt.tsv
+    echo "Running BLAST search on tsa_nt (without header)..."
     blastn -query ${input_file} -db tsa_nt -remote \\
     -outfmt "6 qseqid sseqid stitle pident qcovs length mismatch gapopen qstart qend sstart send evalue bitscore sseq" \\
          >> remote_blast_output_tsa_nt.tsv \\
@@ -62,10 +61,7 @@ process combineBlast {
     script:
     """
     echo -e "Aggregating BLAST hits\n"
-    
-    find . -mindepth 1 -maxdepth 1 -name "*.tsv" \
-      | parallel -j1 "cat {}" \
-      >> Blast_hits.tsv
+    ls results/*nt.tsv | parallel -j1 "cat {}" >> Blast_hits.tsv
     """
 }
 

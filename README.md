@@ -59,6 +59,9 @@ process {
 
 ### 2️⃣ ** Combines tsa_nt and core_nt results  (`combineBlast`)**
 - Outputs results in `.tsv` format
+- if the `combineBlast` process fails `test_script.sh` can be used to combine the `tsv` files
+- make sure `test_script.sh` excutable by running `chmod +x test_script.sh` then run `./test_script.sh`
+
 
 ### 3️⃣ ** Parse Result  (`parse_results`)**
 - Parses BLAST output and ensures required fields (`query`, `accession`, `title`, `sequence`, etc.)

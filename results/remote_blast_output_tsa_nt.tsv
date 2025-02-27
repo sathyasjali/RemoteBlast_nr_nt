@@ -1,6 +1,0 @@
-qseqid	sseqid	stitle	pident	qcovs	length	mismatch	gapopen	qstart	qend	sstart	send	evalue	bitscore	sseq
-test_3	gi|396152919|gb|JW808607.1|	TSA: Curcuma longa Locus_5810_Transcript_12/13_Confidence_0.316_Length_1875_C mRNA sequence	93.478	3	46	3	0	1253	1298	528	573	2.70e-08	69.4	AGGATGTTCTTGTTGAATTCTACGCACCATGGTGTGGCCACTGCAA
-test_3	gi|396107660|gb|JW763348.1|	TSA: Curcuma longa Locus_1574_Transcript_4/8_Confidence_0.500_Length_1632_B mRNA sequence	93.478	3	46	3	0	1253	1298	526	571	2.70e-08	69.4	AGGATGTTCTTGTTGAATTCTACGCACCATGGTGTGGCCACTGCAA
-test_3	gi|299786753|gb|EZ761917.1|	TSA: Milnesium tardigradum contig21701.FC1 mRNA sequence	100.000	2	30	0	0	1270	1299	596	567	2.10e-04	56.5	TTCTACGCACCATGGTGTGGCCACTGCAAA
-test_3	gi|379290744|gb|JT899135.1|	TSA: Branchiostoma lanceolatum Seq63564.cbl mRNA sequence	100.000	2	29	0	0	1270	1298	190	162	7.56e-04	54.7	TTCTACGCACCATGGTGTGGCCACTGCAA
-test_3	gi|379270165|gb|JT858902.1|	TSA: Branchiostoma lanceolatum Seq14382.abl mRNA sequence	100.000	2	29	0	0	1270	1298	397	425	7.56e-04	54.7	TTCTACGCACCATGGTGTGGCCACTGCAA

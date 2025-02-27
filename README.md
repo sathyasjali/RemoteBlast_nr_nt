@@ -77,7 +77,7 @@ CGTAGCTAGCTAGCTAGCTAGCTAGCTAATGGCACCCGCCTTTTGGATACTCTGCAGATGCAAGACATGCTCTAAACTCA
 ## Troubleshooting
 - **Process hangs?** Ensure you have an active **internet connection** as BLAST runs remotely.
 - **Missing results?** Check `core_nt_error.log` and `tsa_nt_error.log` for potential errors.
-- **Docker issues?** Ensure Docker is running and try `nextflow run main.nf -resume`.
+- **Docker issues?** Ensure Docker is running and try `nextflow run blast.nf -resume`.
 
 ## References
 - [Nextflow Official Website](https://www.nextflow.io)

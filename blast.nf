@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-params.input  = "${baseDir}/test.fasta"
+params.input  = "${baseDir}/data/*.fasta"
 params.outdir = "${baseDir}/results"
 params.parseScript = "${baseDir}/bin/tile.py"  // Parameterized path for the Python script
 params.condaProfile = "${baseDir}/my_env.yaml"  // Not required if using 'conda' directive

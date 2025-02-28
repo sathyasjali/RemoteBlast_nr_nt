@@ -5,6 +5,8 @@
 This repository contains a **Nextflow** pipeline for running **Remote BLAST (Basic Local Alignment Search Tool)** analysis against the **NCBI nr/nt database**. The pipeline utilizes a **Docker container** for BLAST execution (and/or Conda for parsing) and supports automated parsing and tiling of BLAST output results. Additionally, a YAML configuration file (`my_env.yaml`) is provided to define the Conda environment for the parsing step.
 
 ## Repository Structure
+
+```plaintext
 .
 ├── blast.nf                   # Main Nextflow pipeline script
 ├── my_env.yaml                # Conda environment definition file
@@ -14,6 +16,7 @@ This repository contains a **Nextflow** pipeline for running **Remote BLAST (Bas
 ├── data
 │   └── test.fasta             # Example input FASTA file
 └── results                    # Output directory (populated by the pipeline)
+
 
 
 ## Prerequisites

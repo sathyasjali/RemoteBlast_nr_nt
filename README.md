@@ -17,6 +17,7 @@ This repository contains a **Nextflow** pipeline for running **Remote BLAST (Bas
 │   └── test.fasta             # Example input FASTA file
 └── results                    # Output directory (populated by the pipeline)
 
+```
 
 
 ## Prerequisites

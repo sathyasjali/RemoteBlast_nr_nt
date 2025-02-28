@@ -3,6 +3,9 @@ nextflow.enable.dsl=2
 
 params.input  = "${baseDir}/test.fasta"
 params.outdir = "${baseDir}/results"
+params.parseScript = "${baseDir}/bin/tile.py"  // Parameterized path for the Python script
+params.condaProfile = "${baseDir}/my_env.yaml"  // Not required if using 'conda' directive
+
 
 process blast_remote {
     label 'blast_container'
@@ -70,14 +73,45 @@ process combineBlast {
     """
 }
 
+process parse_blast_output {
+    conda 'my_env.yaml'  // This will activate the environment defined in my_env.yaml located in the base directory
+
+    input:
+        path tsv_file
+
+    output:
+        path "its.csv", emit: ch_parsed_results
+
+    publishDir params.outdir, mode: 'copy'
+
+    script:
+    """
+    set -e
+    echo -e "Parsing and tiling BLAST results\n"
+    
+    # If you need to activate a conda profile, you can source it if required.
+    # source ${params.condaProfile}  (optional if already activated by Nextflow via conda)
+    
+    python3 ${params.parseScript} ${tsv_file} its.csv
+    
+    echo "..Parsing Done"
+    """
+}
+
+
 workflow {
     // Create an input channel from the FASTA file.
+    // This channel will be used to pass the input file to the blast_remote process.
     ch_inp = Channel.fromPath(params.input)
     
     // Run the blast_remote process (this will publish TSV files into the results folder).
     remote = blast_remote(ch_inp)
     
-    // Run the combineBlast process on the results folder.
-    combineBlast( file(params.outdir) )
+     // Run combineBlast to merge the TSV files. This produces Blast_hits.tsv.
+    merged_tsv = combineBlast( file(params.outdir) )
+    merged_tsv.view()
+    
+    // Parse the merged TSV file to generate tiled output as a CSV file.
+    parse_blast_output(merged_tsv)
     
 }

@@ -1,0 +1,6 @@
+.DS_Store
+.nextflow/
+.nextflow.log*
+work/
+blast_db/
+results/

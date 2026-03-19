@@ -3,7 +3,7 @@
 import pandas as pd
 import sys
 
-def parse_blast_results(core_nt_file, output_csv):
+def parse_blast_results(tsv_file, output_csv):
     """
     Parses BLAST output from the core_nt database, filters alignments shorter than 200 bp,
     and extracts the required columns with descriptive labels.
@@ -21,7 +21,7 @@ def parse_blast_results(core_nt_file, output_csv):
     ]
 
     # Read the BLAST results and skip the first row (header)
-    df_core = pd.read_csv(core_nt_file, sep="\t", names=columns, skiprows=1)
+    df_core = pd.read_csv(tsv_file, sep="\t", names=columns, skiprows=1)
 
     # Convert "Alignment_Length" column to integer
     df_core["Alignment_Length"] = pd.to_numeric(df_core["Alignment_Length"], errors="coerce")
@@ -45,7 +45,7 @@ def parse_blast_results(core_nt_file, output_csv):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python parse_blast_results.py <core_nt_file> <output_csv>")
+        print("Usage: python parse_blast_results.py <tsv_nt_file> <output_csv>")
         sys.exit(1)
 
     core_nt_file = sys.argv[1]
